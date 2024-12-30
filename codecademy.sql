@@ -109,6 +109,13 @@ FROM fake_apps
 GROUP BY price
 HAVING COUNT(price) > 10;
 
-
-
-
+-- number of user clicks to web
+SELECT CASE
+  WHEN url LIKE '%github.com%' THEN 'github'
+  WHEN url LIKE '%medium.com%' THEN 'medium'
+  WHEN url LIKE '%nytimes.com%' THEN 'New York Times'
+  ELSE 'ETC'
+  END AS 'Source',
+  COUNT(*)
+FROM hacker_news
+GROUP BY Source;
