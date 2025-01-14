@@ -45,7 +45,7 @@ SET runtime = 132,
 WHERE name = 'Call Me By Your Name';
 
 ALTER TABLE films
-ADD CONSTRAINT unique_name UNIQUE (name);
+ADD CONSTRAINT unique_name UNIQUE(name);
 
 
 --nomnom 
@@ -119,3 +119,54 @@ SELECT CASE
   COUNT(*)
 FROM hacker_news
 GROUP BY Source;
+
+-- best time to post a story
+-- sql query to get the best time most user post 
+SELECT strftime('%H', timestamp) AS hour,
+      ROUND(AVG(score), 2) AS score,
+      COUNT(*) AS count
+FROM hacker_news
+WHERE timestamp IS NOT NULL
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+-- joins --
+SELECT * FROM orders
+JOIN subscriptions
+ON orders.subscription_id = subscriptions.subscription_id;
+
+SELECT * FROM orders
+JOIN subscriptions
+ON orders.subscription_id = subscriptions.subscription_id
+WHERE subscriptions.description = 'Fashion Magazine';
+
+
+-- A left join will keep all rows from the first table, 
+-- regardless of whether there is a matching row in the second table.
+-- ex. finding users who subscribed to the newspaper but not on the online
+SELECT *
+FROM newspaper
+LEFT JOIN online
+ON newspaper.id = online.id
+WHERE online.id IS NULL;
+
+-- cross join
+SELECT COUNT(*)
+FROM newspaper
+WHERE start_month <= 3
+AND end_month >= 3;
+
+SELECT * 
+FROM newspaper
+CROSS JOIN months
+WHERE newspaper.start_month <= months.month
+AND newspaper.end_month >= months.month;     
+
+SELECT month,
+   COUNT(*) AS 'subscribers'
+FROM newspaper
+CROSS JOIN months
+WHERE start_month <= month 
+   AND end_month >= month
+GROUP BY month;
